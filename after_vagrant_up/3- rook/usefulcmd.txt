@@ -30,8 +30,14 @@ kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['dat
 
 kubectl patch storageclass rook-ceph-block -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
+%$CC(0/\Rm8g]33CpRTP
+
+
 
 kubectl create -f toolbox.yaml
+
+kubectl -n rook-ceph exec -it deploy/rook-ceph-tools -- bash
+
 
 kubectl -n rook-ceph exec -it deploy/rook-ceph-tools -- bash
 

@@ -1,6 +1,0 @@
-
-
-
-AM_ADDR=alertmanager.$LB_IP.nip.io
-
-PCOM_ADDR=mon.$LB_IP.nip.io

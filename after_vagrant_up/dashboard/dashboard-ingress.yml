@@ -1,0 +1,27 @@
+#
+# This example is for Kubernetes running an ngnix-ingress
+# and an ACME (e.g. Let's Encrypt) certificate service
+#
+# The nginx-ingress annotations support the dashboard
+# running using HTTPS with a self-signed certificate
+#
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard # namespace:cluster
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"  
+spec:  
+  ingressClassName: nginx
+  rules:
+    - host: dashboard.172.128.18.111.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kubernetes-dashboard
+                port:
+                  name: https:

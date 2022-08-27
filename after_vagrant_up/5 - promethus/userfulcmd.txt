@@ -1,0 +1,12 @@
+
+
+helm upgrade -i  prometheus prometheus-community/prometheus \
+ --namespace metrics --set server.ingress.hosts={$PROM_ADDR} \
+ --set alertmanager.ingress.hosts={$AM_ADDR} \
+ --create-namespace \
+ -f mon/prom-values-latency2.yml
+
+
+AM_ADDR=alertmanager.$LB_IP.nip.io
+
+PROM_ADDR=mon.$LB_IP.nip.io
