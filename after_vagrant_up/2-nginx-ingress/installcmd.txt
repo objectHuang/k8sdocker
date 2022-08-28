@@ -4,3 +4,12 @@ helm upgrade --install ingress-nginx ingress-nginx \
     --set-string controller.podAnnotations."prometheus\.io/scrape"="true" \
     --set-string controller.podAnnotations."prometheus\.io/port"="10254" \
     --create-namespace --version=4.1.4
+
+
+/*
+kubectl edit ingressclass
+
+ingressclass.kubernetes.io/is-default-class: "true"
+*/
+
+kubectl patch ingressclass nginx -p '{"metadata": {"annotations":{"ingressclass.kubernetes.io/is-default-class":"true"}}}'

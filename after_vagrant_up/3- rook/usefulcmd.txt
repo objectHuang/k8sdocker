@@ -38,7 +38,3 @@ kubectl create -f toolbox.yaml
 
 kubectl -n rook-ceph exec -it deploy/rook-ceph-tools -- bash
 
-
-kubectl -n rook-ceph exec -it deploy/rook-ceph-tools -- bash
-
-kubectl create -f deploy/examples/csi/rbd/storageclass.yaml
