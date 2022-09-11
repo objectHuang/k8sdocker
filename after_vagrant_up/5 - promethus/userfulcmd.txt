@@ -1,10 +1,26 @@
 
+$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+$ helm repo update
+
+
 
 helm upgrade -i  prometheus prometheus-community/prometheus \
  --namespace metrics --set server.ingress.hosts={$PROM_ADDR} \
  --set alertmanager.ingress.hosts={$AM_ADDR} \
  --create-namespace \
- -f mon/prom-values-latency2.yml
+ -f mon/prom-values-limit-mem.yml
+
+
+helm install prometheus-adapter prometheus-community/prometheus-adapter \
+  --namespace metrics \
+  --set metricsRelistInterval=90s \
+  --set prometheus.url=http://prometheus-server.metrics.svc \
+  --set prometheus.port=80
+
+kubectl -n metrics \
+    rollout status \
+    deployment prometheus-adapter
+ 
 
 
 AM_ADDR=alertmanager.$LB_IP.nip.io

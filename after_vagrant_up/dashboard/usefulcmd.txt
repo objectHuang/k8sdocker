@@ -1,6 +1,7 @@
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.5.0/aio/deploy/recommended.yaml
 
 
+/*-----------------does not work------------------------------------
 ---edit pod to enable the http:
 
  - containerPort: 9090
@@ -20,7 +21,7 @@ args:
     - --insecure-port=9090
     - --enable-insecure-login
 
-
+--------------------------------------------------------------------*/
 
 kubectl get secret -n kubernetes-dashboard
 

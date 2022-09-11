@@ -9,13 +9,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kubernetes-dashboard
-  namespace: kubernetes-dashboard # namespace:cluster
+  namespace: kube-system # namespace:cluster
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"  
 spec:  
   ingressClassName: nginx
   rules:
-    - host: dashboard.172.128.18.111.nip.io
+    - host: dashboard.172.18.8.51.nip.io
       http:
         paths:
           - path: /
