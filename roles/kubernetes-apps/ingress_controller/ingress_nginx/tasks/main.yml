@@ -13,23 +13,25 @@
 - name: NGINX Ingress Controller | Templates list
   set_fact:
     ingress_nginx_templates:
-      - { name: 00-namespace, file: 00-namespace.yml, type: ns }
-      - { name: cm-ingress-nginx, file: cm-ingress-nginx.yml, type: cm }
-      - { name: cm-tcp-services, file: cm-tcp-services.yml, type: cm }
-      - { name: cm-udp-services, file: cm-udp-services.yml, type: cm }
+      - { name: namespace, file: namespace.yml, type: ns }
       - { name: sa-ingress-nginx, file: sa-ingress-nginx.yml, type: sa }
-      - { name: clusterrole-ingress-nginx, file: clusterrole-ingress-nginx.yml, type: clusterrole }
-      - { name: clusterrolebinding-ingress-nginx, file: clusterrolebinding-ingress-nginx.yml, type: clusterrolebinding }
+      - { name: sa-ingress-nginx-admission, file: sa-ingress-nginx-admission.yml, type: sa }
       - { name: role-ingress-nginx, file: role-ingress-nginx.yml, type: role }
+      - { name: role-ingress-nginx-admission, file: role-ingress-nginx-admission.yml, type: role }
+      - { name: clusterrole-ingress-nginx, file: clusterrole-ingress-nginx.yml, type: clusterrole }
+      - { name: clusterrole-ingress-nginx-admission, file: clusterrole-ingress-nginx-admission.yml, type: clusterrole }
       - { name: rolebinding-ingress-nginx, file: rolebinding-ingress-nginx.yml, type: rolebinding }
-      - { name: ds-ingress-nginx-controller, file: ds-ingress-nginx-controller.yml, type: ds }
-    ingress_nginx_templates_for_psp:
-      - { name: psp-ingress-nginx, file: psp-ingress-nginx.yml, type: podsecuritypolicy }
-
-- name: NGINX Ingress Controller | Append extra templates to NGINX Ingress Templates list for PodSecurityPolicy
-  set_fact:
-    ingress_nginx_templates: "{{ ingress_nginx_templates_for_psp + ingress_nginx_templates }}"
-  when: podsecuritypolicy_enabled
+      - { name: rolebinding-ingress-nginx-admission, file: rolebinding-ingress-nginx-admission.yml, type: rolebinding }
+      - { name: clusterrolebinding-ingress-nginx, file: clusterrolebinding-ingress-nginx.yml, type: clusterrolebinding }
+      - { name: clusterrolebinding-ingress-nginx-admission, file: clusterrolebinding-ingress-nginx-admission.yml, type: clusterrolebinding }
+      - { name: cm-ingress-nginx, file: cm-ingress-nginx.yml, type: cm }
+      - { name: svc-ingress-nginx-controller, file: svc-ingress-nginx-controller.yml, type: svc }
+      - { name: svc-ingress-nginx-controller-admission, file: svc-ingress-nginx-controller-admission.yml, type: svc }
+      - { name: deploy-ingress-nginx-controller, file: deploy-ingress-nginx-controller.yml, type: deploy }
+      - { name: job-ingress-nginx-controller-admission-create, file: job-ingress-nginx-controller-admission-create.yml, type: job }
+      - { name: job-ingress-nginx-controller-admission-patch, file: job-ingress-nginx-controller-admission-patch.yml, type: job }
+      - { name: ingressclass, file: ingressclass.yml, type: ingressclass }
+      - { name: validationwebhood, file: validationwebhood.yml, type: validationwebhood }
 
 - name: NGINX Ingress Controller | Create manifests
   template:
