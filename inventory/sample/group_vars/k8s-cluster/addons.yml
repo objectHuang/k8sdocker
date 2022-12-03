@@ -84,7 +84,7 @@ rbd_provisioner_enabled: false
 # rbd_provisioner_reclaim_policy: Delete
 
 # Nginx ingress controller deployment
-ingress_nginx_enabled: false
+ingress_nginx_enabled: true
 # ingress_nginx_host_network: false
 ingress_publish_status_address: ""
 # ingress_nginx_nodeselector:
@@ -125,9 +125,9 @@ cert_manager_enabled: false
 # cert_manager_namespace: "cert-manager"
 
 # MetalLB deployment
-metallb_enabled: false
-# metallb_ip_range:
-#   - "10.5.0.50-10.5.0.99"
+metallb_enabled: true
+metallb_ip_range:
+  - "172.128.18.111-172.128.18.199"
 # metallb_version: v0.9.3
 # metallb_protocol: "layer2"
 # metallb_port: "7472"

@@ -5,8 +5,10 @@ metadata:
   name: ingress-nginx
   namespace: {{ ingress_nginx_namespace }}
   labels:
+    app.kubernetes.io/instance: ingress-nginx
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.2.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
