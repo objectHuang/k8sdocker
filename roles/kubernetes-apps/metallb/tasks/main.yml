@@ -62,10 +62,9 @@
 
 - name: Kubernetes Apps | Wait metallb ready
   kube:
-    name: "MetalLB"
     kubectl: "{{ bin_dir }}/kubectl"
     resource: "controller"
-    wait: true
+    namespace: "metallb-system"
     state: "running"
   become: true
   when:

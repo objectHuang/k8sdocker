@@ -140,6 +140,7 @@ class KubeManager(object):
         self.filename = [f.strip() for f in module.params.get('filename') or []]
         self.resource = module.params.get('resource')
         self.label = module.params.get('label')
+        #self.namespace = module.params.get('namespace')
         self.recursive = module.params.get('recursive')
 
     def _execute(self, cmd):
@@ -149,6 +150,7 @@ class KubeManager(object):
             if rc != 0:
                 self.module.fail_json(
                     msg='error running kubectl (%s) command (rc=%d), out=\'%s\', err=\'%s\'' % (' '.join(args), rc, out, err))
+            msg='ran the command '.join(args)
         except Exception as exc:
             self.module.fail_json(
                 msg='error running kubectl (%s) command: %s' % (' '.join(args), str(exc)))
@@ -300,21 +302,18 @@ class KubeManager(object):
     
     def checkrunning(self):
 
-        if not self.force and not self.exists():
-            return []
-
         cmd = ['wait']
 
-       
         if not self.resource:
-            self.module.fail_json(msg='resource required to wait without filename')
+            self.module.fail_json(msg='resource required to wait')
 
-        cmd.append(" --for=condition=available deployment ")
+        cmd.append('deployment')
 
         cmd.append(self.resource)
 
-        cmd.append(" -timeout=60s -A ")
+        cmd.append('--for=condition=available=true')
 
+        cmd.append('--timeout=360s')
 
         return self._execute(cmd)
 
