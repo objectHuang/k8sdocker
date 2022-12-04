@@ -35,7 +35,7 @@
 - name: Kubernetes Apps | Lay Down MetalLB
   become: true
   template: { src: "{{ item }}.j2", dest: "{{ kube_config_dir }}/{{ item }}" }
-  with_items: ["metallb.yml", "metallb-config.yml"]
+  with_items: ["metallb.yml"]
   register: "rendering"
   when:
     - "inventory_hostname == groups['kube-master'][0]"
@@ -44,10 +44,42 @@
   kube:
     name: "MetalLB"
     kubectl: "{{ bin_dir }}/kubectl"
-    filename: "{{ kube_config_dir }}/{{ item.item }}"
+    filename: "{{ kube_config_dir }}/metallb.yml"
+    wait: true
+    state: "{{ item.changed | ternary('latest','present') }}"
+  with_items: "{{ rendering.results }}"
+  become: true
+  when:
+    - "inventory_hostname == groups['kube-master'][0]"
+
+- name: Kubernetes Apps | Lay Down IP Pool
+  become: true
+  template: { src: "{{ item }}.j2", dest: "{{ kube_config_dir }}/{{ item }}" }
+  with_items: ["ip-pool.yml"]
+  register: "ippool"
+  when:
+    - "inventory_hostname == groups['kube-master'][0]"
+
+- name: Kubernetes Apps | Wait metallb ready
+  kube:
+    name: "MetalLB"
+    kubectl: "{{ bin_dir }}/kubectl"
+    resource: "controller"
+    wait: true
+    state: "running"
+  become: true
+  when:
+    - "inventory_hostname == groups['kube-master'][0]"    
+
+- name: Kubernetes Apps | Config Metallb IP Pool
+  kube:
+    name: "MetalLB"
+    kubectl: "{{ bin_dir }}/kubectl"
+    filename: "{{ kube_config_dir }}/ip-pool.yml"
+    wait: true
     state: "{{ item.changed | ternary('latest','present') }}"
   become: true
-  with_items: "{{ rendering.results }}"
+  with_items: "{{ ippool.results }}"
   when:
     - "inventory_hostname == groups['kube-master'][0]"
 
@@ -55,7 +87,7 @@
   command: "{{ bin_dir }}/kubectl --kubeconfig /etc/kubernetes/admin.conf -n metallb-system get secret memberlist"
   register: metallb_secret
   become: true
-  ignore_errors: yes
+  ignore_errors: true
   when:
     - inventory_hostname == groups['kube-master'][0]
 

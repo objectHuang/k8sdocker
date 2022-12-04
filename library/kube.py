@@ -297,7 +297,26 @@ class KubeManager(object):
                 cmd.append('--ignore-not-found')
 
         return self._execute(cmd)
+    
+    def checkrunning(self):
 
+        if not self.force and not self.exists():
+            return []
+
+        cmd = ['wait']
+
+       
+        if not self.resource:
+            self.module.fail_json(msg='resource required to wait without filename')
+
+        cmd.append(" --for=condition=available deployment ")
+
+        cmd.append(self.resource)
+
+        cmd.append(" -timeout=60s -A ")
+
+
+        return self._execute(cmd)
 
 def main():
 
@@ -314,7 +333,7 @@ def main():
             wait=dict(default=False, type='bool'),
             all=dict(default=False, type='bool'),
             log_level=dict(default=0, type='int'),
-            state=dict(default='present', choices=['present', 'absent', 'latest', 'reloaded', 'stopped']),
+            state=dict(default='present', choices=['present', 'absent', 'latest', 'reloaded', 'stopped', 'running']),
             recursive=dict(default=False, type='bool'),
             ),
             mutually_exclusive=[['filename', 'list']]
@@ -338,6 +357,9 @@ def main():
 
     elif state == 'latest':
         result = manager.replace()
+    
+    elif state == 'running':
+        result = manager.checkrunning()
 
     else:
         module.fail_json(msg='Unrecognized state %s.' % state)

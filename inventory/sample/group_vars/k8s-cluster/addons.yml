@@ -1,7 +1,7 @@
 ---
 # Kubernetes dashboard
 # RBAC required. see docs/getting-started.md for access details.
-dashboard_enabled: false
+dashboard_enabled: true
 
 # Helm deployment
 helm_enabled: false
@@ -13,7 +13,7 @@ registry_enabled: false
 # registry_disk_size: "10Gi"
 
 # Metrics Server deployment
-metrics_server_enabled: false
+metrics_server_enabled: true
 # metrics_server_kubelet_insecure_tls: true
 # metrics_server_metric_resolution: 60s
 # metrics_server_kubelet_preferred_address_types: "InternalIP"
@@ -128,7 +128,7 @@ cert_manager_enabled: false
 metallb_enabled: true
 metallb_ip_range:
   - "172.128.18.111-172.128.18.199"
-# metallb_version: v0.9.3
+metallb_version: v0.13.7
 # metallb_protocol: "layer2"
 # metallb_port: "7472"
 # metallb_limits_cpu: "100m"
