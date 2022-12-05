@@ -313,7 +313,7 @@ class KubeManager(object):
 
         cmd.append('--for=condition=available=true')
 
-        cmd.append('--timeout=360s')
+        cmd.append('--timeout=60s')
 
         return self._execute(cmd)
 

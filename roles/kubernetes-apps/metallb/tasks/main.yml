@@ -60,7 +60,7 @@
   when:
     - "inventory_hostname == groups['kube-master'][0]"
 
-- name: Kubernetes Apps | Wait metallb ready
+- name: Kubernetes Apps | Wait metallb controller ready
   kube:
     kubectl: "{{ bin_dir }}/kubectl"
     resource: "controller"
@@ -68,7 +68,11 @@
     state: "running"
   become: true
   when:
-    - "inventory_hostname == groups['kube-master'][0]"    
+    - "inventory_hostname == groups['kube-master'][0]" 
+  register: waitresult
+  until: "waitresult is not failed"
+  retries: 10
+  delay: 10   
 
 - name: Kubernetes Apps | Config Metallb IP Pool
   kube:
@@ -82,24 +86,3 @@
   when:
     - "inventory_hostname == groups['kube-master'][0]"
 
-- name: Kubernetes Apps | Check existing secret of MetalLB
-  command: "{{ bin_dir }}/kubectl --kubeconfig /etc/kubernetes/admin.conf -n metallb-system get secret memberlist"
-  register: metallb_secret
-  become: true
-  ignore_errors: true
-  when:
-    - inventory_hostname == groups['kube-master'][0]
-
-- name: Kubernetes Apps | Create random bytes for MetalLB
-  command: "openssl rand -base64 32"
-  register: metallb_rand
-  when:
-    - inventory_hostname == groups['kube-master'][0]
-    - metallb_secret.rc != 0
-
-- name: Kubernetes Apps | Install secret of MetalLB if not existing
-  command: "{{ bin_dir }}/kubectl --kubeconfig /etc/kubernetes/admin.conf -n metallb-system create secret generic memberlist --from-literal=secretkey={{ metallb_rand.stdout }}"
-  become: true
-  when:
-    - inventory_hostname == groups['kube-master'][0]
-    - metallb_secret.rc != 0
