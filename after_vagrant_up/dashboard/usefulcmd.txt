@@ -23,7 +23,7 @@ args:
 
 --------------------------------------------------------------------*/
 
-kubectl get secret -n kubernetes-dashboard
+kubectl get secret -n kubernetes-dashboarardard
 
 kubectl describe secret admin-user-token-mwxvt -n kubernetes-dashboard
 
