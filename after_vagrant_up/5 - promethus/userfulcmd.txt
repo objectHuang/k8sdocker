@@ -3,6 +3,17 @@ $ helm repo add prometheus-community https://prometheus-community.github.io/helm
 $ helm repo update
 
 
+GD5_ADDR=go-demo-5.$LB_IP.nip.io
+
+
+helm install go-demo-5  https://github.com/vfarcic/go-demo-5/releases/download/0.0.1/go-demo-5-0.0.1.tgz --namespace go-demo-5 --set ingress_host=$GD5_ADDR --create-namespace
+
+
+
+
+kubectl -n go-demo-5 rollout status deployment go-demo-5
+
+
 
 helm upgrade -i  prometheus prometheus-community/prometheus \
  --namespace metrics --set server.ingress.hosts={$PROM_ADDR} \
