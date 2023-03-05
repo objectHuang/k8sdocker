@@ -120,14 +120,6 @@
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
-    - { role: kubernetes-apps/helm, tags: helm }
-
-- hosts: kube-master
-  gather_facts: False
-  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
-  environment: "{{ proxy_disable_env }}"
-  roles:
-    - { role: kubespray-defaults }
     - { role: kubernetes-apps, tags: apps }
 
 - hosts: k8s-cluster
